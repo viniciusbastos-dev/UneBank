@@ -8,8 +8,8 @@ interface Props extends TouchableOpacityProps {
 
 const CustomButton: React.FC<Props> = ({text, ...rest}) => {
   return (
-    <S.Container>
-      <S.ButtonText {...rest}>{text}</S.ButtonText>
+    <S.Container {...rest}>
+      <S.ButtonText>{text}</S.ButtonText>
     </S.Container>
   );
 };

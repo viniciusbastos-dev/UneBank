@@ -8,9 +8,10 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import Home from './screens/Home';
 import Onboarding from './screens/Onboarding';
-import Login from './screens/Login';
+import SignIn from './screens/SignIn';
 import AsyncStorage from '@react-native-community/async-storage';
 import {View} from 'react-native';
+import SignUp from './screens/SignUp';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -76,7 +77,8 @@ const Routes = () => {
       {!hasOnboarded && (
         <Stack.Screen name="Onboarding" component={Onboarding} />
       )}
-      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="SignIn" component={SignIn} />
+      <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="MyTabs" component={MyTabs} />
     </Stack.Navigator>
   );

@@ -15,7 +15,7 @@ interface Props {
 const OnboardingItem: React.FC<Props> = props => {
   return (
     <S.Container>
-      {props?.item?.image}
+      <S.Image source={props?.item?.image} />
       <S.TextWrap>
         <S.Title>{props?.item?.title}</S.Title>
         <S.Description>{props?.item?.description}</S.Description>

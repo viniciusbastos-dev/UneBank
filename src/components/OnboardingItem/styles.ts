@@ -1,12 +1,18 @@
 import {Dimensions} from 'react-native';
 import styled from 'styled-components/native';
 
-const {width} = Dimensions.get('screen');
+const {width, height} = Dimensions.get('window');
 
 export const Container = styled.View`
+  padding-top: 40px;
   width: ${width}px;
   align-items: center;
   justify-content: center;
+`;
+
+export const Image = styled.Image.attrs({resizeMode: 'contain'})`
+  height: ${height / 3}px;
+  width: ${width}px;
 `;
 
 export const TextWrap = styled.View`
