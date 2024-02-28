@@ -1,5 +1,8 @@
-import React from 'react';
-import * as SVG from '../../assets/SVG';
+import {Dimensions} from 'react-native';
+
+const {width, height} = Dimensions.get('window');
+
+console.log(width, height);
 
 export const Slides = [
   {
@@ -7,20 +10,20 @@ export const Slides = [
     title: 'Pagamento mais rápido do mundo',
     description:
       'Escolha entre diversas formas de pagamento e finalize suas transações rapidamente',
-    image: <SVG.OnboardingImage1 margin={40} />,
+    image: require('../../assets/images/Onboarding1.png'),
   },
   {
     id: '2',
     title: 'A Plataforma mais Segura para o Cliente',
     description:
       'Use recursos de segurança como impressão digital, reconhecimento facial e mais para se manter seguro',
-    image: <SVG.OnboardingImage2 margin={40} />,
+    image: require('../../assets/images/Onboarding2.png'),
   },
   {
     id: '3',
     title: 'Aproveite a praticidade do UneBank',
     description:
       'Pague por tudo o que precisa com facilidade e conveniência, sem sair do aplicativo',
-    image: <SVG.OnboardingImage3 margin={40} />,
+    image: require('../../assets/images/Onboarding3.png'),
   },
 ];

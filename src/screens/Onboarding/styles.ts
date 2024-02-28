@@ -14,5 +14,5 @@ export const Content = styled.View`
 `;
 
 export const FooterWrap = styled.View`
-  padding: 0 20px 50px 20px;
+  padding: 0 20px 30px 20px;
 `;
