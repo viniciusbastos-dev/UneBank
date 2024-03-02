@@ -7,6 +7,7 @@ import SignHeader from '../../components/SignHeader';
 import Input from '../../components/Input';
 import CustomButton from '../../components/CustomButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Authentication} from '../../services/Auth';
 
 const SignUp = ({navigation}: any) => {
   const [nomeCompleto, setNomeCompleto] = useState('');
@@ -14,6 +15,12 @@ const SignUp = ({navigation}: any) => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  const onSubmit = async () => {
+    if (nomeCompleto && telefone && email && senha) {
+      await Authentication.createAccount(nomeCompleto, telefone, email, senha);
+    }
+  };
 
   return (
     <S.Container>
@@ -28,24 +35,27 @@ const SignUp = ({navigation}: any) => {
 
         <Input
           label="Nome Completo"
+          type="fullName"
           value={nomeCompleto}
-          onChangeText={value => setNomeCompleto(value)}
+          setValue={setNomeCompleto}
           icon={<SVG.UserIcon />}
         />
         <S.SpaceY space={20} />
 
         <Input
           label="Número de Telefone"
+          type="phoneNumber"
           value={telefone}
-          onChangeText={value => setTelefone(value)}
+          setValue={setTelefone}
           icon={<SVG.PhoneIcon />}
         />
         <S.SpaceY space={20} />
 
         <Input
           label="Endereço de Email"
+          type="email"
           value={email.trim()}
-          onChangeText={value => setEmail(value.trim())}
+          setValue={setEmail}
           keyboardType="email-address"
           icon={<SVG.EmailIcon />}
         />
@@ -53,14 +63,17 @@ const SignUp = ({navigation}: any) => {
 
         <Input
           label="Senha"
+          type="password"
           value={senha.trim()}
-          onChangeText={(value: any) => setSenha(value.trim())}
+          setValue={setSenha}
           secureTextEntry={!showPassword}
+          showPassword={showPassword}
+          togglePassword={() => setShowPassword(!showPassword)}
           icon={<SVG.PasswordIcon />}
         />
         <S.SpaceY space={40} />
 
-        <CustomButton text="Cadastre-se" />
+        <CustomButton text="Cadastre-se" onPress={onSubmit} />
         <S.SpaceY space={30} />
 
         <TouchableOpacity

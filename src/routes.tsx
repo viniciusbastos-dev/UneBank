@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useEffect, useState} from 'react';
 import {
@@ -12,6 +13,8 @@ import SignIn from './screens/SignIn';
 import AsyncStorage from '@react-native-community/async-storage';
 import {View} from 'react-native';
 import SignUp from './screens/SignUp';
+import {useAuth} from './contexts/AuthContext';
+import * as SVG from './assets/SVG';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -23,6 +26,15 @@ const navigatorOptions: any = {
   cardStyle: {backgroundColor: '#fff'},
   cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
   firstRoute: 'Home',
+};
+
+const SignedOutStack = () => {
+  return (
+    <Stack.Navigator screenOptions={navigatorOptions}>
+      <Stack.Screen name="SignIn" component={SignIn} />
+      <Stack.Screen name="SignUp" component={SignUp} />
+    </Stack.Navigator>
+  );
 };
 
 const MyTabs = () => {
@@ -37,19 +49,53 @@ const MyTabs = () => {
         tabBarInactiveTintColor: '#8B8B94',
         tabBarActiveTintColor: '#0066FF',
         tabBarStyle: {
+          backgroundColor: '#27273A',
           position: 'absolute',
           borderTopColor: 'rgba(0, 0, 0, .2)',
         },
       })}>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="MyCards" component={Home} />
-      <Stack.Screen name="Statistics" component={Home} />
-      <Stack.Screen name="Settings" component={Home} />
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={({navigation}: any) => ({
+          title: 'Início',
+          tabBarIcon: ({focused, color}: any) => <SVG.HomeIcon fill={color} />,
+        })}
+      />
+      <Stack.Screen
+        name="MyCards"
+        component={Home}
+        options={({navigation}: any) => ({
+          title: 'Cartões',
+          tabBarIcon: ({focused, color}: any) => <SVG.CardsIcon fill={color} />,
+        })}
+      />
+      <Stack.Screen
+        name="Statistics"
+        component={Home}
+        options={({navigation}: any) => ({
+          title: 'Extrato',
+          tabBarIcon: ({focused, color}: any) => (
+            <SVG.StatisticsIcon fill={color} />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="Settings"
+        component={Home}
+        options={({navigation}: any) => ({
+          title: 'Configurações',
+          tabBarIcon: ({focused, color}: any) => (
+            <SVG.SettingsIcon fill={color} />
+          ),
+        })}
+      />
     </Tab.Navigator>
   );
 };
 
 const Routes = () => {
+  const {user} = useAuth();
   const [hasOnboarded, setHasOnboarded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -77,9 +123,11 @@ const Routes = () => {
       {!hasOnboarded && (
         <Stack.Screen name="Onboarding" component={Onboarding} />
       )}
-      <Stack.Screen name="SignIn" component={SignIn} />
-      <Stack.Screen name="SignUp" component={SignUp} />
-      <Stack.Screen name="MyTabs" component={MyTabs} />
+      {!user ? (
+        <Stack.Screen name="Sign" component={SignedOutStack} />
+      ) : (
+        <Stack.Screen name="MyTabs" component={MyTabs} />
+      )}
     </Stack.Navigator>
   );
 };

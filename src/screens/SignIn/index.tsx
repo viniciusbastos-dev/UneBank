@@ -1,15 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState} from 'react';
 import * as S from './styles';
-import FocusAwareStatusBar from '../../components/FocusAwareStatusBar';
 import * as SVG from '../../assets/SVG';
-import Input from '../../components/Input';
-import CustomButton from '../../components/CustomButton';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import FocusAwareStatusBar from '../../components/FocusAwareStatusBar';
+import Input from '../../components/Input';
+import CustomButton from '../../components/CustomButton';
 import SignHeader from '../../components/SignHeader';
 
 const SignIn = ({navigation}: any) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <S.Container>
       <KeyboardAwareScrollView contentContainerStyle={{paddingBottom: 20}}>
@@ -21,9 +24,24 @@ const SignIn = ({navigation}: any) => {
         <SignHeader title="Sign In" />
         <S.Form>
           <S.SpaceY space={40} />
-          <Input label="Email Address" icon={<SVG.EmailIcon />} />
+          <Input
+            label="Endereço de Email"
+            type="email"
+            value={email}
+            setValue={setEmail}
+            icon={<SVG.EmailIcon />}
+          />
           <S.SpaceY space={20} />
-          <Input label="Password" icon={<SVG.PasswordIcon />} />
+          <Input
+            label="Senha"
+            type="password"
+            value={password}
+            setValue={setPassword}
+            secureTextEntry={!showPassword}
+            showPassword={showPassword}
+            togglePassword={() => setShowPassword(!showPassword)}
+            icon={<SVG.PasswordIcon />}
+          />
           <S.SpaceY space={40} />
           <CustomButton text="Entrar" />
           <S.SpaceY space={30} />

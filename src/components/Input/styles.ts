@@ -17,10 +17,18 @@ export const TextInput = styled.TextInput`
   padding-left: 14px;
   padding-right: 14px;
   color: white;
-  width: 100%;
+  flex: 1;
 `;
 
 export const Label = styled.Text`
   color: #a2a2a7;
   font-family: 'Poppins-Regular';
+`;
+
+export const Pressable = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.9,
+})``;
+
+export const ErrorMessage = styled.Text`
+  color: red;
 `;

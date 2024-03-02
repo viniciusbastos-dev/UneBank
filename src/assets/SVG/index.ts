@@ -4,3 +4,7 @@ export * from './EmailIcon';
 export * from './PasswordIcon';
 export * from './EyeIcon';
 export * from './ChevronLeftIcon';
+export * from './HomeIcon';
+export * from './CardsIcon';
+export * from './StatisticsIcon';
+export * from './SettingsIcon';
