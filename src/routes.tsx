@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useEffect, useState} from 'react';
@@ -114,7 +115,6 @@ const Routes = () => {
   };
 
   if (isLoading) {
-    // eslint-disable-next-line react-native/no-inline-styles
     return <View style={{flex: 1, backgroundColor: '#161622'}} />;
   }
 

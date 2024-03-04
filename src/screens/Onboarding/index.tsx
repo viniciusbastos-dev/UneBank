@@ -30,7 +30,7 @@ const Onboarding: React.FC<any> = ({navigation}) => {
       completeOnBoarding();
       navigation.reset({
         index: 0,
-        routes: [{name: 'SignIn'}],
+        routes: [{name: 'Sign'}],
       });
     }
     if (currentIndex < Slides.length - 1) {

@@ -9,9 +9,15 @@ interface Props {
 
 const SignHeader: React.FC<Props> = props => {
   const navigation = useNavigation();
+
+  const handleGoBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  };
   return (
     <S.Header>
-      <S.GoBackButton onPress={() => navigation.goBack()}>
+      <S.GoBackButton onPress={handleGoBack}>
         <ChevronLeftIcon />
       </S.GoBackButton>
       <S.Title>{props.title}</S.Title>
