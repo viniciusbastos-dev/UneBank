@@ -1,47 +1,82 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable curly */
-/* eslint-disable @typescript-eslint/no-shadow */
-// AuthContext.tsx
+import AsyncStorage from '@react-native-community/async-storage';
+import React, {createContext, useContext, useEffect, useState} from 'react';
+import {UserAPI} from '../services/User';
+import {UserAuthBodyProps} from '../services/User/User-Interface';
+import {isAxiosError} from 'axios';
+import {showMessage} from 'react-native-flash-message';
 
-import React, {createContext, useContext, useState} from 'react';
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+interface User {
+  token: string;
+  id: string;
+  fullName: string;
+  email: string;
+}
+interface AuthContextData {
+  user: User | null;
+  signIn: (body: UserAuthBodyProps) => Promise<void>;
+  signOut: () => Promise<void>;
+  signed: boolean;
+  loading: boolean;
+}
 
-// Criar o contexto
-const AuthContext = createContext<any>(null);
+const AuthContext = createContext<AuthContextData | null>(null);
 
 interface Props {
   children: React.ReactNode;
 }
 
-// Criar o provedor do contexto
 export const AuthProvider: React.FC<Props> = ({children}) => {
-  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [signed, setSigned] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Verificar se o usuário está autenticado
-  React.useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(user => {
-      setUser(user);
-      if (loading) setLoading(false);
-    });
-    return subscriber;
+  useEffect(() => {
+    const loadStorageData = async () => {
+      const storageToken = await AsyncStorage.getItem('@token');
+      const storageUser = await AsyncStorage.getItem('@user');
+
+      if (storageToken && storageUser) {
+        setUser(JSON.parse(storageUser));
+        setSigned(true);
+      }
+    };
+
+    loadStorageData();
   }, []);
 
-  // Função para fazer logout
-  const signOut = async () => {
+  const signIn = async (body: UserAuthBodyProps) => {
+    setLoading(true);
     try {
-      await auth().signOut();
+      const response = await UserAPI.authUser({...body});
+      await AsyncStorage.setItem('@token', JSON.stringify(response.data.token));
+      await AsyncStorage.setItem('@user', JSON.stringify(response.data));
+      setUser(response.data);
     } catch (error) {
-      console.error(error);
+      if (isAxiosError(error)) {
+        showMessage({type: 'danger', message: error?.response?.data?.error});
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
+  const signOut = async () => {
+    await AsyncStorage.removeItem('@token');
+    await AsyncStorage.removeItem('@user');
+    setUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={{user, signOut, loading}}>
+    <AuthContext.Provider value={{user, signed, signIn, signOut, loading}}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Exportar o contexto e o hook para usar o contexto
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
+  }
+  return context;
+};

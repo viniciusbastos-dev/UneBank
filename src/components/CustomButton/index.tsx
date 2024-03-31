@@ -1,21 +1,26 @@
 import React from 'react';
 import * as S from './styles';
-import {TouchableOpacityProps} from 'react-native';
+import {ActivityIndicator, TouchableOpacityProps} from 'react-native';
 
 interface Props extends TouchableOpacityProps {
   text: string;
+  loading?: boolean;
 }
 
-const CustomButton: React.FC<Props> = ({text, ...rest}) => {
+const Button: React.FC<Props> = ({text, loading, ...rest}) => {
   return (
     <S.Container {...rest}>
-      <S.ButtonText>{text}</S.ButtonText>
+      {loading ? (
+        <ActivityIndicator size="small" />
+      ) : (
+        <S.ButtonText>{text}</S.ButtonText>
+      )}
     </S.Container>
   );
 };
 
-CustomButton.defaultProps = {
+Button.defaultProps = {
   text: '',
 };
 
-export default CustomButton;
+export default Button;

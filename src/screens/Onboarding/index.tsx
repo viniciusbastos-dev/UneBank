@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import * as S from './styles';
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar';
-import CustomButton from '../../components/CustomButton';
+import Button from '../../components/CustomButton';
 import {Paginator} from '../../components/Paginator';
 import {Slides} from './slides';
 import {Animated, FlatList} from 'react-native';
@@ -14,7 +14,13 @@ const Onboarding: React.FC<any> = ({navigation}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const viewableItemsChanged = useRef(({viewableItems}: any) => {
-    setCurrentIndex(viewableItems[0].index);
+    if (
+      viewableItems &&
+      viewableItems.length > 0 &&
+      viewableItems[0].index !== undefined
+    ) {
+      setCurrentIndex(viewableItems[0].index);
+    }
   }).current;
 
   const viewConfig = useRef({viewAreaCoveragePercentThreshold: 50}).current;
@@ -68,7 +74,7 @@ const Onboarding: React.FC<any> = ({navigation}) => {
         />
         <S.FooterWrap>
           <Paginator data={Slides} scrollX={scrollX} />
-          <CustomButton onPress={scrollToNextSlide} text="Próximo" />
+          <Button onPress={scrollToNextSlide} text="Próximo" />
         </S.FooterWrap>
       </S.Content>
     </S.Container>

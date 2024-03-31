@@ -1,8 +1,11 @@
 import React from 'react';
 import * as S from './styles';
 import {SearchIcon} from '../../../../assets/SVG';
+import {useAuth} from '../../../../contexts/AuthContext';
 
 const Header = () => {
+  const {user} = useAuth();
+
   return (
     <S.Container>
       <S.Wrapper>
@@ -11,7 +14,7 @@ const Header = () => {
         />
         <S.Column>
           <S.Greetings>Bem-vindo de volta,</S.Greetings>
-          <S.Name>Vinícius</S.Name>
+          <S.Name>{user?.fullName}</S.Name>
         </S.Column>
       </S.Wrapper>
 

@@ -30,5 +30,5 @@ export const Pressable = styled.TouchableOpacity.attrs({
 })``;
 
 export const ErrorMessage = styled.Text`
-  color: red;
+  color: #a94442;
 `;

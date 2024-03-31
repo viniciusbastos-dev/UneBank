@@ -6,16 +6,42 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar';
 import Input from '../../components/Input';
-import CustomButton from '../../components/CustomButton';
+import Button from '../../components/CustomButton';
 import SignHeader from '../../components/SignHeader';
+import {Resolver, useForm} from 'react-hook-form';
+import {useAuth} from '../../contexts/AuthContext';
+import {z} from 'zod';
+import {zodResolver} from '@hookform/resolvers/zod';
+
+const SignInSchema = z.object({
+  email: z
+    .string()
+    .email('Digite um endereço de email válido')
+    .min(1, 'Email é obrigatório'),
+  password: z.string().min(6, 'A senha deve ter no mínimo 6 caracteres'),
+});
+const signUpResolver: Resolver = zodResolver(SignInSchema);
 
 const SignIn = ({navigation}: any) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
+    mode: 'all',
+    resolver: signUpResolver,
+  });
   const [showPassword, setShowPassword] = useState(false);
+  const {signIn, loading} = useAuth();
+
+  const onSubmit = async (data: any) => {
+    signIn(data);
+  };
   return (
     <S.Container>
-      <KeyboardAwareScrollView contentContainerStyle={{paddingBottom: 20}}>
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: 20}}>
         <FocusAwareStatusBar
           barStyle="light-content"
           translucent
@@ -26,24 +52,28 @@ const SignIn = ({navigation}: any) => {
           <S.SpaceY space={40} />
           <Input
             label="Endereço de Email"
-            type="email"
-            value={email}
-            setValue={setEmail}
+            name="email"
+            control={control}
+            error={errors.email}
             icon={<SVG.EmailIcon />}
           />
           <S.SpaceY space={20} />
           <Input
             label="Senha"
-            type="password"
-            value={password}
-            setValue={setPassword}
+            name="password"
+            control={control}
+            error={errors.password}
             secureTextEntry={!showPassword}
             showPassword={showPassword}
             togglePassword={() => setShowPassword(!showPassword)}
             icon={<SVG.PasswordIcon />}
           />
           <S.SpaceY space={40} />
-          <CustomButton text="Entrar" />
+          <Button
+            text="Entrar"
+            loading={loading}
+            onPress={handleSubmit(onSubmit)}
+          />
           <S.SpaceY space={30} />
           <TouchableOpacity
             onPress={() => navigation.navigate('SignUp')}

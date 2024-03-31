@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import * as S from './styles';
 import * as SVG from '../../assets/SVG';
@@ -5,26 +6,71 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar';
 import SignHeader from '../../components/SignHeader';
 import Input from '../../components/Input';
-import CustomButton from '../../components/CustomButton';
+import Button from '../../components/CustomButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Authentication} from '../../services/Auth';
+import {Resolver, useForm} from 'react-hook-form';
+import {z} from 'zod';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {UserAPI} from '../../services/User';
+import {isAxiosError} from 'axios';
+import {showMessage} from 'react-native-flash-message';
+
+const SignUpSchema = z.object({
+  fullName: z
+    .string()
+    .min(3, 'Nome completo é obrigatório')
+    .regex(
+      /^[^\d]+ [^\d]+$/,
+      'Nome completo deve ter pelo menos um nome e um sobrenome',
+    ),
+  phone: z
+    .string()
+    .min(1, 'Telefone é obrigatório')
+    .regex(
+      /^(\d{2})(\d{5})(\d{4})$/,
+      'Telefone deve estar no formato (XX) XXXXX-XXXX',
+    ),
+  email: z
+    .string()
+    .email('Digite um endereço de email válido')
+    .min(1, 'Email é obrigatório'),
+  password: z.string().min(6, 'A senha deve ter no mínimo 6 caracteres'),
+});
+const signUpResolver: Resolver = zodResolver(SignUpSchema);
 
 const SignUp = ({navigation}: any) => {
-  const [nomeCompleto, setNomeCompleto] = useState('');
-  const [telefone, setTelefone] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
+    mode: 'all',
+    resolver: signUpResolver,
+  });
   const [showPassword, setShowPassword] = useState(false);
 
-  const onSubmit = async () => {
-    if (nomeCompleto && telefone && email && senha) {
-      await Authentication.createAccount(nomeCompleto, telefone, email, senha);
+  const onSubmit = async (data: any) => {
+    try {
+      await UserAPI.createUser({
+        ...data,
+      });
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'SignIn'}],
+      });
+      showMessage({type: 'success', message: 'Conta criada com sucesso!'});
+    } catch (error) {
+      if (isAxiosError(error)) {
+        showMessage({type: 'danger', message: error?.response?.data?.error});
+      }
     }
   };
 
   return (
     <S.Container>
-      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: 20}}>
         <FocusAwareStatusBar
           barStyle="light-content"
           translucent
@@ -35,27 +81,27 @@ const SignUp = ({navigation}: any) => {
 
         <Input
           label="Nome Completo"
-          type="fullName"
-          value={nomeCompleto}
-          setValue={setNomeCompleto}
+          name="fullName"
+          control={control}
+          error={errors.fullName}
           icon={<SVG.UserIcon />}
         />
         <S.SpaceY space={20} />
 
         <Input
           label="Número de Telefone"
-          type="phoneNumber"
-          value={telefone}
-          setValue={setTelefone}
+          name="phone"
+          control={control}
+          error={errors.phone}
           icon={<SVG.PhoneIcon />}
         />
         <S.SpaceY space={20} />
 
         <Input
           label="Endereço de Email"
-          type="email"
-          value={email.trim()}
-          setValue={setEmail}
+          name="email"
+          control={control}
+          error={errors.email}
           keyboardType="email-address"
           icon={<SVG.EmailIcon />}
         />
@@ -63,9 +109,9 @@ const SignUp = ({navigation}: any) => {
 
         <Input
           label="Senha"
-          type="password"
-          value={senha.trim()}
-          setValue={setSenha}
+          name="password"
+          control={control}
+          error={errors.password}
           secureTextEntry={!showPassword}
           showPassword={showPassword}
           togglePassword={() => setShowPassword(!showPassword)}
@@ -73,7 +119,7 @@ const SignUp = ({navigation}: any) => {
         />
         <S.SpaceY space={40} />
 
-        <CustomButton text="Cadastre-se" onPress={onSubmit} />
+        <Button text="Cadastre-se" onPress={handleSubmit(onSubmit)} />
         <S.SpaceY space={30} />
 
         <TouchableOpacity
