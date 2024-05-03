@@ -13,7 +13,7 @@ export const InputWrap = styled.View`
   border-bottom-color: #232533;
 `;
 
-export const TextInput = styled.TextInput`
+export const TextInput = styled.TextInput.attrs({})`
   padding-left: 14px;
   padding-right: 14px;
   color: white;

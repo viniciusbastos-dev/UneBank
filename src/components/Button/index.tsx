@@ -11,7 +11,7 @@ const Button: React.FC<Props> = ({text, loading, ...rest}) => {
   return (
     <S.Container {...rest}>
       {loading ? (
-        <ActivityIndicator size="small" />
+        <ActivityIndicator size="small" color="#FFF" />
       ) : (
         <S.ButtonText>{text}</S.ButtonText>
       )}

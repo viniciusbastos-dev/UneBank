@@ -50,9 +50,12 @@ const MyTabs = () => {
         tabBarInactiveTintColor: '#8B8B94',
         tabBarActiveTintColor: '#0066FF',
         tabBarStyle: {
-          backgroundColor: '#27273A',
           position: 'absolute',
-          borderTopColor: 'rgba(0, 0, 0, .2)',
+          height: 86,
+          paddingTop: 16,
+          paddingBottom: 30,
+          borderTopWidth: 0,
+          backgroundColor: '#27273A',
         },
       })}>
       <Stack.Screen

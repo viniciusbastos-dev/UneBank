@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-import React from 'react';
+import React, {MutableRefObject} from 'react';
 import * as S from './styles';
-import {TextInputProps} from 'react-native';
+import {TextInput, TextInputProps} from 'react-native';
 import {EyeIcon} from '../../assets/SVG';
 import {useController} from 'react-hook-form';
 
@@ -13,6 +12,7 @@ interface Props extends TextInputProps {
   showPassword?: boolean;
   togglePassword?: () => void;
   icon?: React.ReactNode;
+  inputRef?: MutableRefObject<TextInput>;
 }
 
 const Input: React.FC<Props> = ({
@@ -23,6 +23,7 @@ const Input: React.FC<Props> = ({
   icon,
   showPassword,
   togglePassword,
+  inputRef,
   ...rest
 }) => {
   const {field} = useController({
@@ -38,6 +39,7 @@ const Input: React.FC<Props> = ({
         {icon}
         <S.TextInput
           {...rest}
+          ref={inputRef}
           value={field.value}
           onChangeText={field.onChange}
           placeholderTextColor={'#A2A2A7'}

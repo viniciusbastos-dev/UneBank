@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import * as S from './styles';
 import * as SVG from '../../assets/SVG';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar';
 import SignHeader from '../../components/SignHeader';
 import Input from '../../components/Input';
-import Button from '../../components/CustomButton';
+import Button from '../../components/Button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Resolver, useForm} from 'react-hook-form';
 import {z} from 'zod';
@@ -48,6 +48,9 @@ const SignUp = ({navigation}: any) => {
     resolver: signUpResolver,
   });
   const [showPassword, setShowPassword] = useState(false);
+  const phoneInputRef = useRef<any>();
+  const emailInputRef = useRef<any>();
+  const passwordInputRef = useRef<any>();
 
   const onSubmit = async (data: any) => {
     try {
@@ -69,6 +72,8 @@ const SignUp = ({navigation}: any) => {
   return (
     <S.Container>
       <KeyboardAwareScrollView
+        enableOnAndroid
+        extraHeight={100}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 20}}>
         <FocusAwareStatusBar
@@ -85,29 +90,38 @@ const SignUp = ({navigation}: any) => {
           control={control}
           error={errors.fullName}
           icon={<SVG.UserIcon />}
+          returnKeyType="next"
+          onSubmitEditing={() => phoneInputRef.current?.focus()}
         />
         <S.SpaceY space={20} />
 
         <Input
+          inputRef={phoneInputRef}
           label="Número de Telefone"
           name="phone"
           control={control}
           error={errors.phone}
           icon={<SVG.PhoneIcon />}
+          returnKeyType="next"
+          onSubmitEditing={() => emailInputRef.current?.focus()}
         />
         <S.SpaceY space={20} />
 
         <Input
+          inputRef={emailInputRef}
           label="Endereço de Email"
           name="email"
           control={control}
           error={errors.email}
           keyboardType="email-address"
           icon={<SVG.EmailIcon />}
+          returnKeyType="next"
+          onSubmitEditing={() => passwordInputRef.current?.focus()}
         />
         <S.SpaceY space={20} />
 
         <Input
+          inputRef={passwordInputRef}
           label="Senha"
           name="password"
           control={control}
@@ -116,6 +130,8 @@ const SignUp = ({navigation}: any) => {
           showPassword={showPassword}
           togglePassword={() => setShowPassword(!showPassword)}
           icon={<SVG.PasswordIcon />}
+          returnKeyType="done"
+          onSubmitEditing={handleSubmit(onSubmit)}
         />
         <S.SpaceY space={40} />
 

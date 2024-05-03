@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import * as S from './styles';
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar';
-import Button from '../../components/CustomButton';
+import Button from '../../components/Button';
 import {Paginator} from '../../components/Paginator';
 import {Slides} from './slides';
 import {Animated, FlatList} from 'react-native';

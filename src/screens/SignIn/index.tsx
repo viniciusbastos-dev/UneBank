@@ -6,7 +6,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar';
 import Input from '../../components/Input';
-import Button from '../../components/CustomButton';
+import Button from '../../components/Button';
 import SignHeader from '../../components/SignHeader';
 import {Resolver, useForm} from 'react-hook-form';
 import {useAuth} from '../../contexts/AuthContext';
