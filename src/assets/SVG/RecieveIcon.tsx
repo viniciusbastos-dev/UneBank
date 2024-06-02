@@ -3,11 +3,12 @@ import Svg, {Path} from 'react-native-svg';
 
 interface Props {
   fill: string;
-  size: number;
+  height: number;
+  width: number;
 }
 
-export const RecieveIcon = ({fill, size}: Props) => (
-  <Svg width={size} height={size} fill="none">
+export const RecieveIcon = ({fill, width, height}: Props) => (
+  <Svg width={width} height={height} fill="none">
     <Path
       stroke={fill}
       strokeLinecap="round"
@@ -19,6 +20,7 @@ export const RecieveIcon = ({fill, size}: Props) => (
 );
 
 RecieveIcon.defaultProps = {
-  size: 16,
+  height: 18,
+  width: 14,
   fill: '#Fff',
 };

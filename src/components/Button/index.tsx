@@ -7,7 +7,7 @@ interface Props extends TouchableOpacityProps {
   loading?: boolean;
 }
 
-const Button: React.FC<Props> = ({text, loading, ...rest}) => {
+const Button: React.FC<Props> = ({text = '', loading, ...rest}) => {
   return (
     <S.Container {...rest}>
       {loading ? (
@@ -17,10 +17,6 @@ const Button: React.FC<Props> = ({text, loading, ...rest}) => {
       )}
     </S.Container>
   );
-};
-
-Button.defaultProps = {
-  text: '',
 };
 
 export default Button;
