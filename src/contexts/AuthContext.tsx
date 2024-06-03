@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {UserAPI} from '../services/User';
-import {UserAuthBodyProps} from '../services/User/User-Interface';
+import {UserAuthBodyProps} from '../services/User/User-interface';
 import {isAxiosError} from 'axios';
 import {showMessage} from 'react-native-flash-message';
 

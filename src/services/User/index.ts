@@ -1,5 +1,5 @@
 import API from '../../helper/axios-instance';
-import {UserAuthBodyProps, UserCreateBodyProps} from './User-Interface';
+import {UserAuthBodyProps, UserCreateBodyProps} from './User-interface';
 import {UserURLS} from './user-urls';
 
 const createUser = async (body: UserCreateBodyProps) => {
